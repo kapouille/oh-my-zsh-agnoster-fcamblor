@@ -86,8 +86,8 @@ prompt_git() {
     remote=${$(git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
     if [[ -n ${remote} ]] ; then
       ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
-      displayed_ahead=" (+${ahead})"
       behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
+      displayed_ahead=" ↑${ahead} ↓$behind" 
     else
       ahead=""
       displayed_ahead=""
@@ -114,16 +114,6 @@ prompt_git() {
     zstyle ':vcs_info:*' actionformats '%u%c'
     vcs_info
     echo -n "${vcs_info_msg_0_}"
-
-    # Displaying upstream dedicated segment
-    if [[ -n $remote ]]; then
-      if [ $behind -ne 0 ]; then
-        prompt_segment magenta white
-      else
-        prompt_segment cyan black
-      fi
-      echo -n " $remote (-$behind)"
-    fi
   fi
 }
 
@@ -164,14 +154,14 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue white '%~'
+  prompt_segment blue black '%~'
 }
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   local PARENT_PATH=${VIRTUAL_ENV%/.*}
   local PARENT_DIR=${PARENT_PATH##*/}
-  if [[ -n $virtualenv_path ]]; then
+  if [[ -n $PARENT_DIR ]]; then
     prompt_segment green black "$PARENT_DIR"
   fi
 }
@@ -191,7 +181,7 @@ prompt_status() {
 }
 
 prompt_next_line() {
-  prompt_segment default yellow "%c>"
+  prompt_segment default white "\n$SEGMENT_SEPARATOR"
   echo -n "%{%f%}"	
 }
 
@@ -210,5 +200,4 @@ build_prompt() {
   prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt)
-$(prompt_next_line) '
+PROMPT='%{%f%b%k%}$(build_prompt)$(prompt_next_line) '
