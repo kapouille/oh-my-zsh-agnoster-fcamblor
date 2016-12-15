@@ -162,7 +162,7 @@ prompt_virtualenv() {
   local PARENT_PATH=${VIRTUAL_ENV%/.*}
   local PARENT_DIR=${PARENT_PATH##*/}
   if [[ -n $PARENT_DIR ]]; then
-    prompt_segment green black "$PARENT_DIR"
+    prompt_segment green black "🐍 $PARENT_DIR"
   fi
 }
 
