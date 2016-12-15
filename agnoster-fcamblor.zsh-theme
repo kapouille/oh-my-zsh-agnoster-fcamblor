@@ -65,11 +65,11 @@ prompt_git() {
     dirty=$(parse_git_dirty)
 
     if [[ $SHOW_STASH_SEGMENT -eq 1 ]]; then
-        stash_size=$(git stash list | wc -l | tr -d ' ')
-        if [[ stash_size -ne 0 ]]; then
-            prompt_segment white black
-            echo -n "+${stash_size}"
-        fi
+	stash_size=$(git stash list | wc -l | tr -d ' ')
+	if [[ stash_size -ne 0 ]]; then
+	    prompt_segment white black
+	    echo -n "+${stash_size}"
+	fi
     fi
 
 	ref=$(git symbolic-ref HEAD 2> /dev/null)
@@ -87,7 +87,7 @@ prompt_git() {
     if [[ -n ${remote} ]] ; then
       ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
       behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
-      displayed_ahead=" ↑${ahead} ↓$behind" 
+      displayed_ahead=" ↑${ahead} ↓$behind"
     else
       ahead=""
       displayed_ahead=""
@@ -108,8 +108,8 @@ prompt_git() {
     zstyle ':vcs_info:*' enable git
     zstyle ':vcs_info:*' get-revision true
     zstyle ':vcs_info:*' check-for-changes true
-    zstyle ':vcs_info:*' stagedstr '✚'
-    zstyle ':vcs_info:git:*' unstagedstr '●'
+    zstyle ':vcs_info:*' stagedstr '+'
+    zstyle ':vcs_info:git:*' unstagedstr '!'
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats '%u%c'
     vcs_info
@@ -182,11 +182,11 @@ prompt_status() {
 
 prompt_next_line() {
   prompt_segment default white "\n$SEGMENT_SEPARATOR"
-  echo -n "%{%f%}"	
+  echo -n "%{%f%}"
 }
 
 function vi_mode_prompt_info() {
-  echo "${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}" 
+  echo "${${KEYMAP/vicmd/-- NORMAL --}/(main|viins)/-- INSERT --}"
 }
 
 ## Main prompt
