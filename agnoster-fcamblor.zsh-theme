@@ -94,10 +94,14 @@ prompt_git() {
       behind=""
     fi
 
-    if [[ -n $dirty ]]; then
-      prompt_segment yellow black
+    if [[ $behind -ne 0 ]] && [[ $ahead -ne 0 ]]; then
+      prompt_segment red black
     else
-      prompt_segment green black
+      if [[ -n $dirty ]]; then
+        prompt_segment yellow black
+      else
+        prompt_segment green black
+      fi
     fi
 
     echo -n "${ref_symbol} ${ref}${displayed_ahead}"
@@ -114,6 +118,16 @@ prompt_git() {
     zstyle ':vcs_info:*' actionformats '%u%c'
     vcs_info
     echo -n "${vcs_info_msg_0_}"
+
+    # Displaying upstream dedicated segment
+    if [[ -n $remote ]]; then
+      if [[ $behind -ne 0 ]]; then
+        prompt_segment magenta white
+      else
+        prompt_segment cyan black
+      fi
+      echo -n " $remote (-$behind)"
+    fi
   fi
 }
 
