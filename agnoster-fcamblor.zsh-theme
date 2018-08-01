@@ -65,11 +65,11 @@ prompt_git() {
     dirty=$(parse_git_dirty)
 
     if [[ $SHOW_STASH_SEGMENT -eq 1 ]]; then
-	stash_size=$(git stash list | wc -l | tr -d ' ')
-	if [[ stash_size -ne 0 ]]; then
-	    prompt_segment white black
-	    echo -n "+${stash_size}"
-	fi
+      stash_size=$(git stash list | wc -l | tr -d ' ')
+      if [[ stash_size -ne 0 ]]; then
+          prompt_segment white black
+          echo -n "+${stash_size}"
+      fi
     fi
 
 	ref=$(git symbolic-ref HEAD 2> /dev/null)
@@ -87,7 +87,7 @@ prompt_git() {
     if [[ -n ${remote} ]] ; then
       ahead=$(git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l | tr -d ' ')
       behind=$(git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l | tr -d ' ')
-      displayed_ahead=" ↑${ahead} ↓$behind"
+      displayed_ahead=" (+${ahead})"
     else
       ahead=""
       displayed_ahead=""
@@ -168,7 +168,7 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  prompt_segment blue black '%~'
+  prompt_segment blue white '%~'
 }
 
 # Virtualenv: current working virtualenv
@@ -194,7 +194,7 @@ prompt_status() {
 }
 
 prompt_next_line() {
-  prompt_segment default white "\n$SEGMENT_SEPARATOR"
+  prompt_segment default yellow "%c>"
   echo -n "%{%f%}"
 }
 
@@ -213,4 +213,5 @@ build_prompt() {
   prompt_end
 }
 
-PROMPT='%{%f%b%k%}$(build_prompt)$(prompt_next_line) '
+PROMPT='%{%f%b%k%}$(build_prompt)
+$(prompt_next_line) '
