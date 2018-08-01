@@ -159,10 +159,9 @@ prompt_dir() {
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
-  local PARENT_PATH=${VIRTUAL_ENV%/.*}
-  local PARENT_DIR=${PARENT_PATH##*/}
-  if [[ -n $PARENT_DIR ]]; then
-    prompt_segment green black "🐍 $PARENT_DIR"
+  local virtualenv_path="$VIRTUAL_ENV"
+  if [[ -n $virtualenv_path ]]; then
+    prompt_segment green black "🐍 (`basename $virtualenv_path`)"
   fi
 }
 
